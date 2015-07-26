@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>TwitchTracker</title>
+  <!-- Bootstrap -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/slate/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+  <h2>Twitch Streaming</h2>       
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Channel</th>
+          <th>Viewers</th>
+          <th>Stream</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
+  </div>
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $.getJSON('/refresh', function(data) {
+      var tbody = document.getElementById("tbody");
+      data.channels.forEach(function(element, index){
+        var tr = tbody.appendChild(document.createElement("tr"));
+        var td0 = tr.appendChild(document.createElement("td"));
+        var td1 = tr.appendChild(document.createElement("td"));
+        var td2 = tr.appendChild(document.createElement("td"));
+        var viewers = data.viewers[index];
+        if(viewers>0) {
+          var a = td0.appendChild(document.createElement("a"));
+          a.innerHTML = data.channels[index];
+          a.href = data.links[index];
+        } else {
+          td0.innerHTML = data.channels[index];
+        }
+        td1.innerHTML = viewers;
+        td2.innerHTML = data.streams[index];
+      });
+    });
+    setTimeout((function(){
+      document.location.reload(true);
+    }), 60000);
+  </script>
+</body>
+</html>

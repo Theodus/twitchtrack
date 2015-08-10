@@ -22,7 +22,7 @@ func twitchtrackHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/", twitchtrackHandler)
 	http.HandleFunc("/refresh", refreshHandler)
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe("0.0.0.0:80", nil)
 }
 
 func refreshHandler(w http.ResponseWriter, r *http.Request) {
@@ -64,3 +64,5 @@ func refresh() ([]string, []int, []string, []string) {
 	}
 	return channels, viewers, streams, links
 }
+// compile to raspberry pi:
+// GOARM=6 GOARCH=arm GOOS=linux go build twitchtrack

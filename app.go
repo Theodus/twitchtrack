@@ -1,12 +1,11 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"html/template"
 	"net/http"
-
-	"github.com/mrshankly/go-twitch/twitch"
+    "appengine/urlfetch"
+    "appengine"
+    "io/ioutil"
 )
 
 func twitchtrackHandler(w http.ResponseWriter, r *http.Request) {
@@ -22,11 +21,26 @@ func twitchtrackHandler(w http.ResponseWriter, r *http.Request) {
 func init() {
 	http.HandleFunc("/", twitchtrackHandler)
 	http.HandleFunc("/refresh", refreshHandler)
-	http.ListenAndServe("localhost:80", nil)
 }
 
 func refreshHandler(w http.ResponseWriter, r *http.Request) {
-	channels, viewers, streams, links := refresh()
+    ctx := appengine.NewContext(r)
+    client := urlfetch.Client(ctx)
+    res, err := client.Get("https://api.twitch.tv/kraken/users/ElTheodus/follows/channels")
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        ctx.Errorf(err.Error())
+        return
+    }
+    b, err := ioutil.ReadAll(res.Body)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        ctx.Errorf(err.Error())
+        return
+    }
+    ctx.Infof(string(b))
+    /*
+	channels, viewers, streams, links := refresh(ctx)
 	res := map[string]interface{}{
 		"channels": channels,
 		"viewers":  viewers,
@@ -38,8 +52,10 @@ func refreshHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	*/
 }
 
+/*
 func refresh() ([]string, []int, []string, []string) {
 	channels := []string{}
 	viewers := []int{}
@@ -64,3 +80,4 @@ func refresh() ([]string, []int, []string, []string) {
 	}
 	return channels, viewers, streams, links
 }
+*/

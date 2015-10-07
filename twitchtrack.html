@@ -26,31 +26,6 @@
   </div>
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <script type="text/javascript">
-    $.getJSON('/refresh', function(data) {
-      var tbody = document.getElementById("tbody");
-      data.channels.forEach(function(element, index){
-        var tr = tbody.appendChild(document.createElement("tr"));
-        var td0 = tr.appendChild(document.createElement("td"));
-        var td1 = tr.appendChild(document.createElement("td"));
-        var td2 = tr.appendChild(document.createElement("td"));
-        var viewers = data.viewers[index];
-        if(viewers>0) {
-          var a = td0.appendChild(document.createElement("a"));
-          a.innerHTML = data.channels[index];
-          a.href = data.links[index];
-        } else {
-          td0.innerHTML = data.channels[index];
-        }
-        td1.innerHTML = viewers;
-        td2.innerHTML = data.streams[index];
-      });
-    });
-    setTimeout((function(){
-      document.location.reload(true);
-    }), 60000);
-  </script>
+  <script src="/js/script.js"></script>
 </body>
 </html>

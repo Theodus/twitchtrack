@@ -6,6 +6,7 @@ import (
     "appengine/urlfetch"
     "appengine"
     "io/ioutil"
+    "encoding/json"
 )
 
 func twitchtrackHandler(w http.ResponseWriter, r *http.Request) {
@@ -25,6 +26,7 @@ func init() {
 
 func refreshHandler(w http.ResponseWriter, r *http.Request) {
     ctx := appengine.NewContext(r)
+    var data map[string]interface{}
     client := urlfetch.Client(ctx)
     res, err := client.Get("https://api.twitch.tv/kraken/users/ElTheodus/follows/channels")
     if err != nil {
@@ -38,7 +40,19 @@ func refreshHandler(w http.ResponseWriter, r *http.Request) {
         ctx.Errorf(err.Error())
         return
     }
-    ctx.Infof(string(b))
+    err = json.Unmarshal(b, &data)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        ctx.Errorf(err.Error())
+        return
+    }
+    enc := json.NewEncoder(w)
+    err = enc.Encode(data)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        ctx.Errorf(err.Error())
+        return
+    }
     /*
 	channels, viewers, streams, links := refresh(ctx)
 	res := map[string]interface{}{

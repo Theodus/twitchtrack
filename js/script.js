@@ -1,7 +1,7 @@
 $.getJSON('/refresh', function(data) {
 	console.log(data);
     var tbody = document.getElementById("tbody");
-    data.channels.forEach(function(element, index){
+    data.follows.forEach(function(element, index){
         var tr = tbody.appendChild(document.createElement("tr"));
         var td0 = tr.appendChild(document.createElement("td"));
         var td1 = tr.appendChild(document.createElement("td"));

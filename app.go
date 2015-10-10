@@ -8,6 +8,7 @@ import (
     "io/ioutil"
     "encoding/json"
     "fmt"
+    "sync"
 )
 
 func twitchtrackHandler(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +52,7 @@ type channel struct {
     Game    string `json:"game"`
     Viewers int    `json:"viewers"`
     Stream  string `json:"stream"`
-    Url    string `json:"url"`
+    Url     string `json:"url"`
     Online  bool   `json:"online"`
 }
 
@@ -64,9 +65,9 @@ func refreshHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
     enc := json.NewEncoder(w)
-    var c []*channel
+    var tc []*channel
     for _, e := range f.Follows {
-        c = append(c, &channel{
+        tc = append(tc, &channel{
             Channel: e.Channel.Name,
             Game:    e.Channel.Game,
             Viewers: 0,
@@ -75,19 +76,29 @@ func refreshHandler(w http.ResponseWriter, r *http.Request) {
             Online:  false,
         })
     }
-    for _, e := range c {
-        v, err := viewers(ctx, e.Channel)
-        if err != nil {
-            http.Error(w, err.Error(), http.StatusInternalServerError)
-            ctx.Errorf(err.Error())
-            return
-        }
-        e.Viewers = v
-        if v>0 {
-            e.Online = true
+    var wg sync.WaitGroup
+    views := make([]int, len(tc))
+    for i, e := range tc {
+        wg.Add(1)
+        go func(i int, c string, ctx appengine.Context) {
+            defer wg.Done()
+            v, err := getViewers(ctx, c)
+            if err != nil {
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                ctx.Errorf(err.Error())
+                return
+            }
+            views[i] = v
+        }(i, e.Channel, ctx)
+    }
+    wg.Wait()
+    for i, e := range views {
+        tc[i].Viewers = e
+        if e>0 {
+            tc[i].Online = true
         }
     }
-    err = enc.Encode(data{c})
+    err = enc.Encode(data{tc})
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         ctx.Errorf(err.Error())
@@ -113,7 +124,7 @@ func getFollows(ctx appengine.Context) (follows, error){
     return f, nil
 }
 
-func viewers(ctx appengine.Context, channel string) (viewers int, err error){
+func getViewers(ctx appengine.Context, channel string) (viewers int, err error){
     var s streams
     viewers = 0
     client := urlfetch.Client(ctx)

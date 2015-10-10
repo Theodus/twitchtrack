@@ -51,7 +51,7 @@ type channel struct {
     Game    string `json:"game"`
     Viewers int    `json:"viewers"`
     Stream  string `json:"stream"`
-    Link    string `json:"link"`
+    Url    string `json:"url"`
     Online  bool   `json:"online"`
 }
 
@@ -71,7 +71,7 @@ func refreshHandler(w http.ResponseWriter, r *http.Request) {
             Game:    e.Channel.Game,
             Viewers: 0,
             Stream:  e.Channel.Status,
-            Link:    e.Channel.Url,
+            Url:    e.Channel.Url,
             Online:  false,
         })
     }

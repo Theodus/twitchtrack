@@ -8,7 +8,6 @@ $.getJSON('/refresh', function(data) {
         var a = td0.appendChild(document.createElement("a"));
         a.innerHTML = element.channel;
         a.href = element.url;
-        console.log(element.url);
         var viewers = element.viewers;
         if(viewers > 0) {
         	td1.innerHTML = element.game;

@@ -7,6 +7,7 @@ import (
     "appengine"
     "io/ioutil"
     "encoding/json"
+    "fmt"
 )
 
 func twitchtrackHandler(w http.ResponseWriter, r *http.Request) {
@@ -24,74 +25,109 @@ func init() {
 	http.HandleFunc("/refresh", refreshHandler)
 }
 
+type follows struct {
+    Follows []struct {
+        Channel struct {
+            Game   string
+            Name   string
+            Status string
+            Url    string
+        }
+    }
+}
+
+type streams struct {
+    Stream struct {
+        Viewers int
+    }
+}
+
+type data struct {
+    Channels []*channel `json:"channels"`
+}
+
+type channel struct {
+    Channel string `json:"channel"`
+    Game    string `json:"game"`
+    Viewers int    `json:"viewers"`
+    Stream  string `json:"stream"`
+    Link    string `json:"link"`
+    Online  bool   `json:"online"`
+}
+
 func refreshHandler(w http.ResponseWriter, r *http.Request) {
     ctx := appengine.NewContext(r)
-    var data map[string]interface{}
-    client := urlfetch.Client(ctx)
-    res, err := client.Get("https://api.twitch.tv/kraken/users/ElTheodus/follows/channels")
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        ctx.Errorf(err.Error())
-        return
-    }
-    b, err := ioutil.ReadAll(res.Body)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        ctx.Errorf(err.Error())
-        return
-    }
-    err = json.Unmarshal(b, &data)
+    f, err := getFollows(ctx)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         ctx.Errorf(err.Error())
         return
     }
     enc := json.NewEncoder(w)
-    err = enc.Encode(data)
+    var c []*channel
+    for _, e := range f.Follows {
+        c = append(c, &channel{
+            Channel: e.Channel.Name,
+            Game:    e.Channel.Game,
+            Viewers: 0,
+            Stream:  e.Channel.Status,
+            Link:    e.Channel.Url,
+            Online:  false,
+        })
+    }
+    for _, e := range c {
+        v, err := viewers(ctx, e.Channel)
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            ctx.Errorf(err.Error())
+            return
+        }
+        e.Viewers = v
+        if v>0 {
+            e.Online = true
+        }
+    }
+    err = enc.Encode(data{c})
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         ctx.Errorf(err.Error())
         return
     }
-    /*
-	channels, viewers, streams, links := refresh(ctx)
-	res := map[string]interface{}{
-		"channels": channels,
-		"viewers":  viewers,
-		"streams":  streams,
-		"links":    links,
-	}
-	enc := json.NewEncoder(w)
-	err := enc.Encode(res)
-	if err != nil {
-		fmt.Println(err)
-	}
-	*/
 }
 
-/*
-func refresh() ([]string, []int, []string, []string) {
-	channels := []string{}
-	viewers := []int{}
-	streams := []string{}
-	links := []string{}
-
-	client := twitch.NewClient(&http.Client{})
-	res, err := client.Users.Follows("ElTheodus", nil)
-	if err != nil {
-		fmt.Println(err)
-	}
-	for _, e := range res.Follows {
-		name := e.Channel.Name
-		channels = append(channels, name)
-		links = append(links, e.Channel.Url)
-		res, err := client.Streams.Channel(name)
-		if err != nil {
-			fmt.Println(err)
-		}
-		viewers = append(viewers, res.Stream.Viewers)
-		streams = append(streams, res.Stream.Game)
-	}
-	return channels, viewers, streams, links
+func getFollows(ctx appengine.Context) (follows, error){
+    var f follows
+    client := urlfetch.Client(ctx)
+    res, err := client.Get("https://api.twitch.tv/kraken/users/ElTheodus/follows/channels")
+    if err != nil {
+        return f, err
+    }
+    b, err := ioutil.ReadAll(res.Body)
+    if err != nil {
+        return f, err
+    }
+    err = json.Unmarshal(b, &f)
+    if err != nil {
+        return f, err
+    }
+    return f, nil
 }
-*/
+
+func viewers(ctx appengine.Context, channel string) (viewers int, err error){
+    var s streams
+    viewers = 0
+    client := urlfetch.Client(ctx)
+    res, err := client.Get(fmt.Sprintf("%s%s/", "https://api.twitch.tv/kraken/streams/", channel))
+    if err != nil {
+        return viewers, err
+    }
+    b, err := ioutil.ReadAll(res.Body)
+    if err != nil {
+        return viewers, err
+    }
+    if err = json.Unmarshal(b, &s); err != nil {
+        return viewers, err
+    }
+    viewers = s.Stream.Viewers
+    return viewers, nil
+}

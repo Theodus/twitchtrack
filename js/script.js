@@ -1,21 +1,19 @@
 $.getJSON('/refresh', function(data) {
-	console.log(data);
     var tbody = document.getElementById("tbody");
-    data.follows.forEach(function(element, index){
+    data.channels.forEach(function(element, index) {
         var tr = tbody.appendChild(document.createElement("tr"));
         var td0 = tr.appendChild(document.createElement("td"));
         var td1 = tr.appendChild(document.createElement("td"));
         var td2 = tr.appendChild(document.createElement("td"));
-        var viewers = data.viewers[index];
-        if(viewers>0) {
-            var a = td0.appendChild(document.createElement("a"));
-            a.innerHTML = data.channels[index];
-            a.href = data.links[index];
-        } else {
-            td0.innerHTML = data.channels[index];
+        var a = td0.appendChild(document.createElement("a"));
+        a.innerHTML = element.channel;
+        a.href = element.url;
+        console.log(element.url);
+        var viewers = element.viewers;
+        if(viewers > 0) {
+        	td1.innerHTML = element.game;
+            td2.innerHTML = element.stream;
         }
-        td1.innerHTML = viewers;
-        td2.innerHTML = data.streams[index];
     });
 });
 setTimeout((function(){

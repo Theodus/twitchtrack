@@ -3,8 +3,7 @@ package main
 import (
 	"html/template"
 	"net/http"
-    "appengine/urlfetch"
-    "appengine"
+	"log"
     "io/ioutil"
     "encoding/json"
     "fmt"
@@ -14,16 +13,17 @@ import (
 func twitchtrackHandler(w http.ResponseWriter, r *http.Request) {
 	p, err := template.ParseFiles("twitchtrack.html")
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	if err := p.Execute(w, nil); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
 
-func init() {
+func main() {
 	http.HandleFunc("/", twitchtrackHandler)
 	http.HandleFunc("/refresh", refreshHandler)
+	log.Fatal(http.ListenAndServe("localhost:80", nil))
 }
 
 type follows struct {
@@ -57,11 +57,10 @@ type channel struct {
 }
 
 func refreshHandler(w http.ResponseWriter, r *http.Request) {
-    ctx := appengine.NewContext(r)
-    f, err := getFollows(ctx)
+    f, err := getFollows()
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
-        ctx.Errorf(err.Error())
+        log.Println(err)
         return
     }
     enc := json.NewEncoder(w)
@@ -80,16 +79,16 @@ func refreshHandler(w http.ResponseWriter, r *http.Request) {
     views := make([]int, len(tc))
     for i, e := range tc {
         wg.Add(1)
-        go func(i int, c string, ctx appengine.Context) {
+        go func(i int, c string) {
             defer wg.Done()
-            v, err := getViewers(ctx, c)
+            v, err := getViewers(c)
             if err != nil {
                 http.Error(w, err.Error(), http.StatusInternalServerError)
-                ctx.Errorf(err.Error())
+                log.Println(err)
                 return
             }
             views[i] = v
-        }(i, e.Channel, ctx)
+        }(i, e.Channel)
     }
     wg.Wait()
     for i, e := range views {
@@ -101,15 +100,19 @@ func refreshHandler(w http.ResponseWriter, r *http.Request) {
     err = enc.Encode(data{tc})
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
-        ctx.Errorf(err.Error())
+        log.Println(err)
         return
     }
 }
 
-func getFollows(ctx appengine.Context) (follows, error){
+func getFollows() (follows, error){
     var f follows
-    client := urlfetch.Client(ctx)
-    res, err := client.Get("https://api.twitch.tv/kraken/users/ElTheodus/follows/channels")
+    req, err := http.NewRequest("GET", "https://api.twitch.tv/kraken/users/ElTheodus/follows/channels", nil)
+    if err != nil {
+        return f, err
+    }
+    c := &http.Client{}
+    res, err := c.Do(req)
     if err != nil {
         return f, err
     }
@@ -124,11 +127,15 @@ func getFollows(ctx appengine.Context) (follows, error){
     return f, nil
 }
 
-func getViewers(ctx appengine.Context, channel string) (viewers int, err error){
+func getViewers(channel string) (viewers int, err error){
     var s streams
     viewers = 0
-    client := urlfetch.Client(ctx)
-    res, err := client.Get(fmt.Sprintf("%s%s/", "https://api.twitch.tv/kraken/streams/", channel))
+    req, err := http.NewRequest("GET", fmt.Sprintf("%s%s/", "https://api.twitch.tv/kraken/streams/", channel), nil)
+    if err != nil {
+        return viewers, err
+    }
+    c := &http.Client{}
+    res, err := c.Do(req)
     if err != nil {
         return viewers, err
     }

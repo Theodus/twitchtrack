@@ -23,7 +23,7 @@ func twitchtrackHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/", twitchtrackHandler)
 	http.HandleFunc("/refresh", refreshHandler)
-	log.Fatal(http.ListenAndServe("localhost:80", nil))
+	log.Fatal(http.ListenAndServe(":80", nil))
 }
 
 type follows struct {

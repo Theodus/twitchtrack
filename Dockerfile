@@ -4,4 +4,3 @@ ADD . /go
 WORKDIR /go
 RUN go build app.go
 CMD /go/app
-EXPOSE 80

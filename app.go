@@ -10,6 +10,13 @@ import (
     "sync"
 )
 
+func main() {
+    log.Println("Ready to serve.")
+    http.HandleFunc("/", twitchtrackHandler)
+    http.HandleFunc("/refresh", refreshHandler)
+    log.Fatal(http.ListenAndServe(":80", nil))
+}
+
 func twitchtrackHandler(w http.ResponseWriter, r *http.Request) {
 	p, err := template.ParseFiles("twitchtrack.html")
 	if err != nil {
@@ -18,12 +25,6 @@ func twitchtrackHandler(w http.ResponseWriter, r *http.Request) {
 	if err := p.Execute(w, nil); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func main() {
-	http.HandleFunc("/", twitchtrackHandler)
-	http.HandleFunc("/refresh", refreshHandler)
-	log.Fatal(http.ListenAndServe(":80", nil))
 }
 
 type follows struct {

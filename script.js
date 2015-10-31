@@ -19,7 +19,6 @@ $.getJSON('/refresh', function(data){
 $(function(){
   setInterval(function(){
     rebuild();
-    console.log('yup');
   }, 60000);
 });
 
@@ -32,7 +31,6 @@ function rebuild() {
       var td1 = tr.childNodes[1];
       var td2 = tr.childNodes[2];
       var a = td0.childNodes[0];
-      console.log(a);
       a.innerHTML = element.channel;
       a.href = element.url;
       var viewers = element.viewers;

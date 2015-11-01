@@ -16,11 +16,11 @@ $.getJSON('/refresh', function(data){
   });
 });
 
-$(function(){
-  setInterval(function(){
-    rebuild();
-  }, 60000);
-});
+setInterval(function(){
+  rebuild();
+}, 60000);
+
+
 
 function rebuild() {
   $.getJSON('/refresh', function(data){

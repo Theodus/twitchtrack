@@ -17,12 +17,6 @@ $.getJSON('/refresh', function(data){
 });
 
 setInterval(function(){
-  rebuild();
-}, 60000);
-
-
-
-function rebuild() {
   $.getJSON('/refresh', function(data){
     var tbody = document.getElementById("tbody");
     data.channels.forEach(function(element, index) {
@@ -40,4 +34,4 @@ function rebuild() {
       }
     });
   });
-}
+}, 60000);

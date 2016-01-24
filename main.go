@@ -6,17 +6,13 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 	"sync"
-	"time"
 )
-
-const RefreshTime = 120 // time in seconds
 
 func main() {
 	http.HandleFunc("/", rootHandler)
 	http.HandleFunc("/script.js", scriptHandler)
-	http.HandleFunc("/longpoll", longpollHandler)
+	http.HandleFunc("/data", dataHandler)
 	log.Println("Serving.")
 	log.Fatal(http.ListenAndServe("0.0.0.0:80", nil))
 }
@@ -29,59 +25,22 @@ func scriptHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "script.js")
 }
 
-var lastData data
-
-func longpollHandler(w http.ResponseWriter, r *http.Request) {
-	first, err := strconv.ParseBool(r.URL.Query().Get("first"))
-	if err != nil || first == false {
-		first = false
+func dataHandler(w http.ResponseWriter, r *http.Request) {
+	d, err := refresh()
+	if err != nil {
+		log.Println("Error: ", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	log.Println("First Request:", first)
 	enc := json.NewEncoder(w)
-	if first {
-		d, err := refresh(w)
-		if err != nil {
-			log.Println("Error:", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-		lastData = d
-		log.Println("First: ", d)
-		if err := enc.Encode(d); err != nil {
-			log.Println("Error: ", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-		return
+	if err = enc.Encode(d); err != nil {
+		log.Println("Error: ", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	for _ = range time.Tick(time.Duration(RefreshTime) * time.Second) {
-		d, err := refresh(w)
-		if err != nil {
-			log.Println("Error:", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-		if len(lastData.Channels) != len(d.Channels) {
-			lastData = d
-			if err := enc.Encode(d); err != nil {
-				log.Println("Error: ", err)
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-			}
-			log.Println("Refresh: ", d)
-			return
-		}
-		for i, tc := range d.Channels {
-			if tc.Stream != lastData.Channels[i].Stream {
-				lastData = d
-				if err := enc.Encode(d); err != nil {
-					log.Println("Error: ", err)
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-				}
-				log.Println("Refresh: ", d)
-				return
-			}
-		}
-	}
+	log.Println("Response: ", d)
+	return
 }
 
-func refresh(w http.ResponseWriter) (d data, err error) {
+func refresh() (d data, err error) {
 	f, err := getFollows()
 	if err != nil {
 		return d, err
@@ -103,7 +62,7 @@ func refresh(w http.ResponseWriter) (d data, err error) {
 			v, err := getViewers(c.Channel)
 			if err != nil {
 				log.Println("Error: ", err)
-				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
 			}
 			tc[i].Viewers = v
 		}(i, c)

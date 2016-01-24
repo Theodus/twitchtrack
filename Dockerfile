@@ -1,4 +1,4 @@
-FROM golang:1.5
+FROM golang:1.5.3
 RUN apt-get update
 ADD . /go
 WORKDIR /go

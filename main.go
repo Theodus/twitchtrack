@@ -18,7 +18,7 @@ func main() {
 	http.HandleFunc("/script.js", scriptHandler)
 	http.HandleFunc("/longpoll", longpollHandler)
 	log.Println("Serving.")
-	log.Fatal(http.ListenAndServe("127.0.0.1:80", nil))
+	log.Fatal(http.ListenAndServe("0.0.0.0:80", nil))
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {

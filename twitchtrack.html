@@ -10,21 +10,10 @@
   <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/slate/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h2>Twitch Streaming</h2>       
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Channel</th>
-          <th>Game</th>
-          <th>Stream</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
-  </div>
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="script.js"></script>
+  <div id="app"></div>
+  <script src="main.js"></script>
+  <script>
+    var node = document.getElementById('app');
+    var app = Elm.embed(Elm.Main, node);
+  </script>
 </body>
-</html>

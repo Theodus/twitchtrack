@@ -6,23 +6,30 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"sync"
 )
 
 func main() {
 	http.HandleFunc("/", rootHandler)
-	http.HandleFunc("/script.js", scriptHandler)
+	http.HandleFunc("/main.js", mainHandler)
 	http.HandleFunc("/data", dataHandler)
-	log.Println("Serving.")
-	log.Fatal(http.ListenAndServe("0.0.0.0:80", nil))
+	var port string
+	if len(os.Args) == 2 {
+		port = os.Args[1]
+	} else {
+		port = "80"
+	}
+	log.Println("Serving on port", port)
+	log.Fatal(http.ListenAndServe("0.0.0.0:"+port, nil))
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "twitchtrack.html")
 }
 
-func scriptHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "script.js")
+func mainHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "main.js")
 }
 
 func dataHandler(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +58,7 @@ func refresh() (d data, err error) {
 			Channel: e.Channel.Name,
 			Game:    e.Channel.Game,
 			Stream:  e.Channel.Status,
-			Url:     e.Channel.Url,
+			URL:     e.Channel.URL,
 		})
 	}
 	var wg sync.WaitGroup
@@ -77,7 +84,7 @@ type follows struct {
 			Game   string
 			Name   string
 			Status string
-			Url    string
+			URL    string
 		}
 	}
 }
@@ -90,7 +97,7 @@ type channel struct {
 	Channel string `json:"channel"`
 	Game    string `json:"game"`
 	Stream  string `json:"stream"`
-	Url     string `json:"url"`
+	URL     string `json:"url"`
 	Viewers int    `json:"viewers"`
 }
 

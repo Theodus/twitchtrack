@@ -1,0 +1,1163 @@
+Elm.Html = Elm.Html || {};
+Elm.Html.Shorthand = Elm.Html.Shorthand || {};
+Elm.Html.Shorthand.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Shorthand = _elm.Html.Shorthand || {};
+   if (_elm.Html.Shorthand.values)
+   return _elm.Html.Shorthand.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Attributes$Extra = Elm.Html.Attributes.Extra.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Html$Events$Extra = Elm.Html.Events.Extra.make(_elm),
+   $Html$Shorthand$Event = Elm.Html.Shorthand.Event.make(_elm),
+   $Html$Shorthand$Internal = Elm.Html.Shorthand.Internal.make(_elm),
+   $Html$Shorthand$Type = Elm.Html.Shorthand.Type.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var meter$ = F2(function (p,t) {
+      var filterJust = $List.filterMap($Basics.identity);
+      return A2($Html.meter,
+      A2($Basics._op["++"],
+      _U.list([$Html$Attributes.value($Basics.toString(p.value))
+              ,$Html$Attributes.min($Basics.toString($Basics.min))
+              ,$Html$Attributes.max($Basics.toString(p.max))]),
+      filterJust(_U.list([A2($Maybe.map,
+                         function (_p0) {
+                            return $Html$Attributes$Extra.low($Basics.toString(_p0));
+                         },
+                         p.low)
+                         ,A2($Maybe.map,
+                         function (_p1) {
+                            return $Html$Attributes$Extra.high($Basics.toString(_p1));
+                         },
+                         p.high)
+                         ,A2($Maybe.map,
+                         function (_p2) {
+                            return $Html$Attributes$Extra.optimum($Basics.toString(_p2));
+                         },
+                         p.optimum)]))),
+      _U.list([$Html.text(t)]));
+   });
+   var progress$ = F2(function (p,t) {
+      return A2($Html.progress,
+      _U.list([$Html$Attributes.value($Basics.toString(p.value))
+              ,$Html$Attributes.max($Basics.toString(p.max))]),
+      _U.list([$Html.text(t)]));
+   });
+   var option$ = function (p) {
+      return A2($Html.option,
+      _U.list([A2($Html$Attributes$Extra.stringProperty,
+              "label",
+              p.label)
+              ,$Html$Attributes.value($Basics.toString(p.value))
+              ,$Html$Attributes.selected(p.selected)]),
+      _U.list([]));
+   };
+   var option_ = F2(function (val,sel) {
+      return A2($Html.option,
+      _U.list([$Html$Attributes.selected(sel)]),
+      _U.list([$Html.text(val)]));
+   });
+   var buttonReset_ = function (t) {
+      return A2($Html.button,
+      _U.list([$Html$Attributes.type$("reset")]),
+      _U.list([$Html.text(t)]));
+   };
+   var buttonSubmit_ = function (t) {
+      return A2($Html.button,
+      _U.list([$Html$Attributes.type$("submit")]),
+      _U.list([$Html.text(t)]));
+   };
+   var buttonLink_ = F3(function (t,clickAddr,click) {
+      return A2($Html.button,
+      _U.list([$Html$Attributes.type$("button")
+              ,A2($Html$Events.onClick,clickAddr,click)]),
+      _U.list([$Html.text(t)]));
+   });
+   var button_ = F3(function (t,clickAddr,click) {
+      return A2($Html.button,
+      _U.list([$Html$Attributes.type$("button")
+              ,A2($Html$Events.onClick,clickAddr,click)]),
+      _U.list([$Html.text(t)]));
+   });
+   var label_ = F2(function ($for,t) {
+      return A2($Html.label,
+      _U.list([$Html$Attributes.$for($for)]),
+      _U.list([$Html.text(t)]));
+   });
+   var legend_ = function (t) {
+      return A2($Html.legend,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var fieldset_ = function (disabled) {
+      return $Html.fieldset(_U.list([$Html$Attributes.disabled(disabled)]));
+   };
+   var th_ = $Html.th(_U.list([]));
+   var td_ = $Html.td(_U.list([]));
+   var tr_ = $Html.tr(_U.list([]));
+   var tfoot_ = $Html.tfoot(_U.list([]));
+   var thead_ = $Html.thead(_U.list([]));
+   var tbody_ = $Html.tbody(_U.list([]));
+   var caption_ = $Html.caption(_U.list([]));
+   var table_ = $Html.table(_U.list([]));
+   var audio_ = function (url) {
+      return A2($Html.audio,
+      _U.list([$Html$Attributes.src(url)]),
+      _U.list([]));
+   };
+   var video_ = function (url) {
+      return A2($Html.video,
+      _U.list([$Html$Attributes.src(url)]),
+      _U.list([]));
+   };
+   var param$ = F2(function (n,v) {
+      return A2($Html.param,
+      _U.list([$Html$Attributes.name(n),$Html$Attributes.value(v)]),
+      _U.list([]));
+   });
+   var img_ = F4(function (w,h,s,a) {
+      return A2($Html.img,
+      _U.list([$Html$Attributes.width(w)
+              ,$Html$Attributes.height(h)
+              ,$Html$Attributes.src(s)
+              ,$Html$Attributes.alt(a)]),
+      _U.list([]));
+   });
+   var del_ = $Html.del(_U.list([]));
+   var ins_ = $Html.ins(_U.list([]));
+   var wbr$ = A2($Html.wbr,_U.list([]),_U.list([]));
+   var br$ = A2($Html.br,_U.list([]),_U.list([]));
+   var span_ = $Html.span(_U.list([]));
+   var bdo$ = function (dir) {
+      return $Html.bdo(_U.list([$Html$Attributes.dir(function () {
+         var _p3 = dir;
+         switch (_p3.ctor)
+         {case "LeftToRight": return "ltr";
+            case "RightToLeft": return "rtl";
+            default: return "auto";}
+      }())]));
+   };
+   var bdi_ = function (t) {
+      return A2($Html.bdi,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var rp_ = function (t) {
+      return A2($Html.rp,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var rt_ = function (t) {
+      return A2($Html.rt,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var ruby_ = $Html.ruby(_U.list([]));
+   var mark_ = $Html.mark(_U.list([]));
+   var u_ = function (t) {
+      return A2($Html.u,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var b_ = function (t) {
+      return A2($Html.b,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var i_ = function (t) {
+      return A2($Html.i,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var sup_ = function (t) {
+      return A2($Html.sup,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var sub_ = function (t) {
+      return A2($Html.sub,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var kbd_ = $Html.kbd(_U.list([]));
+   var samp_ = $Html.samp(_U.list([]));
+   var var_ = function (t) {
+      return A2($Html.$var,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var code_ = $Html.code(_U.list([]));
+   var abbr_ = function (t) {
+      return A2($Html.abbr,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var q_ = function (t) {
+      return A2($Html.q,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var cite_ = $Html.cite(_U.list([]));
+   var s_ = function (t) {
+      return A2($Html.s,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var small_ = function (t) {
+      return A2($Html.small,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var strong_ = function (t) {
+      return A2($Html.strong,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var em_ = function (t) {
+      return A2($Html.em,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var a_ = F2(function (href,t) {
+      return A2($Html.a,
+      _U.list([$Html$Attributes.href(href)]),
+      _U.list([$Html.text(t)]));
+   });
+   var div_ = $Html.div(_U.list([]));
+   var figcaption_ = $Html.figcaption(_U.list([]));
+   var dd_ = $Html.dd(_U.list([]));
+   var dl_ = $Html.dl(_U.list([]));
+   var li_ = $Html.li(_U.list([]));
+   var ul_ = $Html.ul(_U.list([]));
+   var ol_ = $Html.ol(_U.list([]));
+   var blockquote_ = $Html.blockquote(_U.list([]));
+   var pre_ = $Html.pre(_U.list([]));
+   var hr_ = A2($Html.hr,_U.list([]),_U.list([]));
+   var p_ = $Html.p(_U.list([]));
+   var main_ = $Html.main$(_U.list([]));
+   var address_ = $Html.address(_U.list([]));
+   var footer_ = $Html.footer(_U.list([]));
+   var header_ = $Html.header(_U.list([]));
+   var h6_ = function (t) {
+      return A2($Html.h6,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var h5_ = function (t) {
+      return A2($Html.h5,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var h4_ = function (t) {
+      return A2($Html.h4,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var h3_ = function (t) {
+      return A2($Html.h3,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var h2_ = function (t) {
+      return A2($Html.h2,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var h1_ = function (t) {
+      return A2($Html.h1,_U.list([]),_U.list([$Html.text(t)]));
+   };
+   var nav_ = $Html.nav(_U.list([]));
+   var body_ = $Html.body(_U.list([]));
+   var class$ = $Html$Shorthand$Internal.class$;
+   var body$ = function (p) {
+      return $Html.body(_U.list([class$(p.$class)]));
+   };
+   var nav$ = function (p) {
+      return $Html.nav(_U.list([class$(p.$class)]));
+   };
+   var h1$ = function (p) {
+      return $Html.h1(_U.list([class$(p.$class)]));
+   };
+   var h2$ = function (p) {
+      return $Html.h2(_U.list([class$(p.$class)]));
+   };
+   var h3$ = function (p) {
+      return $Html.h3(_U.list([class$(p.$class)]));
+   };
+   var h4$ = function (p) {
+      return $Html.h4(_U.list([class$(p.$class)]));
+   };
+   var h5$ = function (p) {
+      return $Html.h5(_U.list([class$(p.$class)]));
+   };
+   var h6$ = function (p) {
+      return $Html.h6(_U.list([class$(p.$class)]));
+   };
+   var header$ = function (p) {
+      return $Html.header(_U.list([class$(p.$class)]));
+   };
+   var footer$ = function (p) {
+      return $Html.footer(_U.list([class$(p.$class)]));
+   };
+   var address$ = function (p) {
+      return $Html.address(_U.list([class$(p.$class)]));
+   };
+   var p$ = function (param) {
+      return $Html.p(_U.list([class$(param.$class)]));
+   };
+   var pre$ = function (p) {
+      return $Html.pre(_U.list([class$(p.$class)]));
+   };
+   var blockquote$ = function (p) {
+      return $Html.blockquote(_U.list([class$(p.$class)
+                                      ,$Html$Attributes.cite(p.cite)]));
+   };
+   var ol$ = function (p) {
+      return $Html.ol(_U.list([class$(p.$class)]));
+   };
+   var ul$ = function (p) {
+      return $Html.ul(_U.list([class$(p.$class)]));
+   };
+   var li$ = function (p) {
+      return $Html.li(_U.list([class$(p.$class)]));
+   };
+   var dl$ = function (p) {
+      return $Html.dl(_U.list([class$(p.$class)]));
+   };
+   var dd$ = function (p) {
+      return $Html.dd(_U.list([class$(p.$class)]));
+   };
+   var figcaption$ = function (p) {
+      return $Html.figcaption(_U.list([class$(p.$class)]));
+   };
+   var div$ = function (p) {
+      return $Html.div(_U.list([class$(p.$class)]));
+   };
+   var a$ = function (p) {
+      return $Html.a(_U.list([class$(p.$class)
+                             ,$Html$Attributes.href(p.href)]));
+   };
+   var em$ = function (p) {
+      return $Html.em(_U.list([class$(p.$class)]));
+   };
+   var strong$ = function (p) {
+      return $Html.strong(_U.list([class$(p.$class)]));
+   };
+   var small$ = function (p) {
+      return $Html.small(_U.list([class$(p.$class)]));
+   };
+   var s$ = function (p) {
+      return $Html.s(_U.list([class$(p.$class)]));
+   };
+   var cite$ = function (p) {
+      return $Html.cite(_U.list([class$(p.$class)]));
+   };
+   var q$ = function (p) {
+      return $Html.q(_U.list([class$(p.$class)
+                             ,$Html$Attributes.cite(p.cite)]));
+   };
+   var abbr$ = function (p) {
+      return $Html.abbr(_U.list([class$(p.$class)]));
+   };
+   var code$ = function (p) {
+      return $Html.code(_U.list([class$(p.$class)]));
+   };
+   var var$ = function (p) {
+      return $Html.$var(_U.list([class$(p.$class)]));
+   };
+   var samp$ = function (p) {
+      return $Html.samp(_U.list([class$(p.$class)]));
+   };
+   var kbd$ = function (p) {
+      return $Html.kbd(_U.list([class$(p.$class)]));
+   };
+   var sub$ = function (p) {
+      return $Html.sub(_U.list([class$(p.$class)]));
+   };
+   var sup$ = function (p) {
+      return $Html.sup(_U.list([class$(p.$class)]));
+   };
+   var i$ = function (p) {
+      return $Html.i(_U.list([class$(p.$class)]));
+   };
+   var b$ = function (p) {
+      return $Html.b(_U.list([class$(p.$class)]));
+   };
+   var u$ = function (p) {
+      return $Html.u(_U.list([class$(p.$class)]));
+   };
+   var mark$ = function (p) {
+      return $Html.mark(_U.list([class$(p.$class)]));
+   };
+   var ruby$ = function (p) {
+      return $Html.ruby(_U.list([class$(p.$class)]));
+   };
+   var rt$ = function (p) {
+      return $Html.rt(_U.list([class$(p.$class)]));
+   };
+   var rp$ = function (p) {
+      return $Html.rp(_U.list([class$(p.$class)]));
+   };
+   var bdi$ = function (p) {
+      return $Html.bdi(_U.list([class$(p.$class)]));
+   };
+   var span$ = function (p) {
+      return $Html.span(_U.list([class$(p.$class)]));
+   };
+   var ins$ = function (p) {
+      return $Html.ins(_U.list([class$(p.$class)
+                               ,$Html$Attributes.cite(p.cite)
+                               ,$Html$Attributes.datetime(p.datetime)]));
+   };
+   var del$ = function (p) {
+      return $Html.del(_U.list([class$(p.$class)
+                               ,$Html$Attributes.cite(p.cite)
+                               ,$Html$Attributes.datetime(p.datetime)]));
+   };
+   var img$ = function (p) {
+      return A2($Html.img,
+      _U.list([class$(p.$class)
+              ,$Html$Attributes.src(p.src)
+              ,$Html$Attributes.width(p.width)
+              ,$Html$Attributes.height(p.height)
+              ,$Html$Attributes.alt(p.alt)]),
+      _U.list([]));
+   };
+   var video$ = function (p) {
+      var filterJust = $List.filterMap($Basics.identity);
+      return $Html.video(A2($Basics._op["++"],
+      _U.list([class$(p.$class)
+              ,$Html$Attributes.width(p.width)
+              ,$Html$Attributes.height(p.height)
+              ,$Html$Attributes.autoplay(p.autoplay)
+              ,$Html$Attributes.controls(p.controls)
+              ,$Html$Attributes.loop(p.loop)]),
+      filterJust(_U.list([A2($Maybe.map,$Html$Attributes.src,p.src)
+                         ,A2($Maybe.map,
+                         $Html$Attributes$Extra.stringProperty("preload"),
+                         p.preload)
+                         ,A2($Maybe.map,$Html$Attributes.poster,p.poster)
+                         ,A2($Maybe.map,$Html$Attributes$Extra.volume,p.volume)]))));
+   };
+   var audio$ = function (p) {
+      var filterJust = $List.filterMap($Basics.identity);
+      return $Html.audio(A2($Basics._op["++"],
+      _U.list([class$(p.$class)
+              ,$Html$Attributes.autoplay(p.autoplay)
+              ,$Html$Attributes.controls(p.controls)
+              ,$Html$Attributes.loop(p.loop)]),
+      filterJust(_U.list([A2($Maybe.map,$Html$Attributes.src,p.src)
+                         ,A2($Maybe.map,
+                         $Html$Attributes$Extra.stringProperty("preload"),
+                         p.preload)
+                         ,A2($Maybe.map,$Html$Attributes.poster,p.poster)
+                         ,A2($Maybe.map,$Html$Attributes$Extra.volume,p.volume)]))));
+   };
+   var table$ = function (p) {
+      return $Html.table(_U.list([class$(p.$class)]));
+   };
+   var caption$ = function (p) {
+      return $Html.caption(_U.list([class$(p.$class)]));
+   };
+   var tbody$ = function (p) {
+      return $Html.tbody(_U.list([class$(p.$class)]));
+   };
+   var thead$ = function (p) {
+      return $Html.thead(_U.list([class$(p.$class)]));
+   };
+   var tfoot$ = function (p) {
+      return $Html.tfoot(_U.list([class$(p.$class)]));
+   };
+   var tr$ = function (p) {
+      return $Html.tr(_U.list([class$(p.$class)]));
+   };
+   var td$ = function (p) {
+      return $Html.td(_U.list([class$(p.$class)]));
+   };
+   var th$ = function (p) {
+      return $Html.th(_U.list([class$(p.$class)]));
+   };
+   var form$ = function (p) {
+      var onEnter$ = function (msg) {
+         return A3($Html$Events.on,
+         "keypress",
+         A2($Json$Decode.customDecoder,
+         $Html$Events.keyCode,
+         function (c) {
+            return _U.eq(c,
+            13) ? $Result.Ok({ctor: "_Tuple0"}) : $Result.Err("expected key code 13");
+         }),
+         $Basics.always(msg));
+      };
+      var filterJust = $List.filterMap($Basics.identity);
+      return $Html.form(A2($List._op["::"],
+      class$(p.$class),
+      A2($List._op["::"],
+      $Html$Attributes.novalidate(p.novalidate),
+      filterJust(_U.list([A2($Maybe.map,
+                         function (_p4) {
+                            return A3($Html$Events.on,
+                            "submit",
+                            $Json$Decode.value,
+                            $Basics.always(_p4));
+                         },
+                         p.update.onSubmit)
+                         ,A2($Maybe.map,onEnter$,p.update.onSubmit)])))));
+   };
+   var fieldset$ = function (p) {
+      return $Html.fieldset(_U.list([class$(p.$class)
+                                    ,$Html$Attributes.disabled(p.disabled)]));
+   };
+   var legend$ = function (p) {
+      return $Html.legend(_U.list([class$(p.$class)]));
+   };
+   var label$ = function (p) {
+      return $Html.label(_U.list([class$(p.$class)
+                                 ,$Html$Attributes.$for(p.$for)]));
+   };
+   var button$ = function (p) {
+      return $Html.button(_U.list([class$(p.$class)
+                                  ,$Html$Attributes.type$("button")
+                                  ,A3($Html$Events.on,
+                                  "click",
+                                  $Json$Decode.value,
+                                  $Basics.always(p.update.onClick))]));
+   };
+   var buttonLink$ = function (p) {
+      return $Html.a(_U.list([class$(p.$class)
+                             ,$Html$Attributes.href("#")
+                             ,A3($Html$Events.on,
+                             "click",
+                             $Json$Decode.value,
+                             $Basics.always(p.update.onClick))]));
+   };
+   var buttonSubmit$ = function (p) {
+      return $Html.button(_U.list([class$(p.$class)
+                                  ,$Html$Attributes.type$("submit")]));
+   };
+   var buttonReset$ = function (p) {
+      return $Html.button(_U.list([class$(p.$class)
+                                  ,$Html$Attributes.type$("reset")]));
+   };
+   var id$ = $Html$Shorthand$Internal.id$;
+   var section_ = function (i) {
+      return $Html.section(_U.list([id$(i)]));
+   };
+   var section$ = function (p) {
+      return $Html.section(_U.list([class$(p.$class),id$(p.id)]));
+   };
+   var article_ = function (i) {
+      return $Html.article(_U.list([id$(i)]));
+   };
+   var article$ = function (p) {
+      return $Html.article(_U.list([class$(p.$class),id$(p.id)]));
+   };
+   var aside$ = function (p) {
+      return $Html.aside(_U.list([class$(p.$class),id$(p.id)]));
+   };
+   var dt$ = function (p) {
+      return $Html.dt(_U.list([class$(p.$class),id$(p.id)]));
+   };
+   var figure$ = function (p) {
+      return $Html.figure(_U.list([class$(p.$class),id$(p.id)]));
+   };
+   var dfn$ = function (p) {
+      return $Html.dfn(_U.list([class$(p.$class),id$(p.id)]));
+   };
+   var embed$ = function (p) {
+      return A2($Html.embed,
+      _U.list([class$(p.$class)
+              ,id$(p.id)
+              ,$Html$Attributes.src(p.src)
+              ,$Html$Attributes.type$(p.type$)
+              ,$Html$Attributes.width(p.width)
+              ,$Html$Attributes.height(p.height)]),
+      _U.list([]));
+   };
+   var encodeClass = $Html$Shorthand$Internal.encodeClass;
+   var encodeId = $Html$Shorthand$Internal.encodeId;
+   var iframe$ = function (p) {
+      var filterJust = $List.filterMap($Basics.identity);
+      var i$ = encodeId(p.name);
+      return A2($Html.iframe,
+      A2($Basics._op["++"],
+      _U.list([class$(p.$class)
+              ,$Html$Attributes.id(i$)
+              ,$Html$Attributes.name(i$)
+              ,$Html$Attributes.src(p.src)
+              ,$Html$Attributes.width(p.width)
+              ,$Html$Attributes.height(p.height)
+              ,$Html$Attributes.seamless(p.seamless)]),
+      filterJust(_U.list([A2($Maybe.map,
+      $Html$Attributes.sandbox,
+      p.sandbox)]))),
+      _U.list([]));
+   };
+   var object$ = function (p) {
+      var filterJust = $List.filterMap($Basics.identity);
+      var attrs = filterJust(_U.list([A2($Maybe.map,
+      function (_p5) {
+         return $Html$Attributes.usemap(A2($String.cons,
+         _U.chr("#"),
+         encodeId(_p5)));
+      },
+      p.useMapName)]));
+      var i$ = encodeId(p.name);
+      return $Html.object(A2($Basics._op["++"],
+      _U.list([class$(p.$class)
+              ,$Html$Attributes.id(i$)
+              ,$Html$Attributes.name(i$)
+              ,A2($Html$Attributes.attribute,"data",p.data)
+              ,$Html$Attributes.type$(p.type$)]),
+      A2($Basics._op["++"],
+      attrs,
+      _U.list([$Html$Attributes.height(p.height)
+              ,$Html$Attributes.width(p.width)]))));
+   };
+   var inputField$ = F2(function (p,attrs) {
+      var i$ = encodeId(p.name);
+      var filterJust = $List.filterMap($Basics.identity);
+      var pattrs = A2($Basics._op["++"],
+      _U.list([$Html$Attributes.type$(p.type$)
+              ,$Html$Attributes.id(i$)
+              ,$Html$Attributes.name(i$)
+              ,$Html$Attributes.required(p.required)]),
+      filterJust(_U.list([A2($Maybe.map,
+                         class$,
+                         _U.eq(p.$class,"") ? $Maybe.Nothing : $Maybe.Just(p.$class))
+                         ,A2($Maybe.map,
+                         function (onEvent) {
+                            return A2($Html$Shorthand$Event.onInput,
+                            A2($Html$Shorthand$Event.messageDecoder,p.decoder,onEvent),
+                            $Basics.identity);
+                         },
+                         p.update.onInput)
+                         ,A2($Maybe.map,
+                         function (onEvent) {
+                            return A2($Html$Shorthand$Event.onEnter,
+                            A2($Html$Shorthand$Event.messageDecoder,p.decoder,onEvent),
+                            $Basics.identity);
+                         },
+                         p.update.onEnter)
+                         ,A2($Maybe.map,
+                         function (onEvent) {
+                            return A2($Html$Shorthand$Event.onKeyboardLost,
+                            A2($Html$Shorthand$Event.messageDecoder,p.decoder,onEvent),
+                            $Basics.identity);
+                         },
+                         p.update.onKeyboardLost)
+                         ,A2($Maybe.map,$Html$Attributes.placeholder,p.placeholder)
+                         ,A2($Maybe.map,$Html$Attributes.pattern,p.pattern)])));
+      return A2($Html.input,
+      A2($Basics._op["++"],pattrs,attrs),
+      _U.list([]));
+   });
+   var inputText$ = function (p) {
+      return A2(inputField$,
+      {$class: p.$class
+      ,name: p.name
+      ,placeholder: p.placeholder
+      ,update: p.update
+      ,type$: "text"
+      ,pattern: $Maybe.Nothing
+      ,required: p.required
+      ,decoder: $Html$Events.targetValue},
+      _U.list([$Html$Attributes.value(p.value)
+              ,$Html$Attributes.autocomplete(p.autocomplete)]));
+   };
+   var inputMaybeText$ = function (p) {
+      return A2(inputField$,
+      {$class: p.$class
+      ,name: p.name
+      ,placeholder: p.placeholder
+      ,update: p.update
+      ,type$: "text"
+      ,pattern: $Maybe.Nothing
+      ,required: false
+      ,decoder: $Html$Events$Extra.targetValueMaybe},
+      _U.list([$Html$Attributes.value(A2($Maybe.withDefault,
+              "",
+              p.value))
+              ,$Html$Attributes.autocomplete(p.autocomplete)]));
+   };
+   var inputFloat$ = function (p) {
+      var filterJust = $List.filterMap($Basics.identity);
+      return A2(inputField$,
+      {$class: p.$class
+      ,name: p.name
+      ,placeholder: p.placeholder
+      ,update: p.update
+      ,type$: "number"
+      ,pattern: $Maybe.Nothing
+      ,required: true
+      ,decoder: function () {
+         var _p6 = {ctor: "_Tuple2",_0: p.min,_1: p.max};
+         if (_p6.ctor === "_Tuple2" && _p6._0.ctor === "Nothing" && _p6._1.ctor === "Nothing")
+         {
+               return $Html$Events$Extra.targetValueFloat;
+            } else {
+               return A2($Json$Decode.customDecoder,
+               $Html$Events$Extra.targetValueFloat,
+               function (v) {
+                  return _U.cmp(v,
+                  A2($Maybe.withDefault,-1 / 0,p.min)) < 0 || _U.cmp(v,
+                  A2($Maybe.withDefault,
+                  1 / 0,
+                  p.max)) > 0 ? $Result.Err("out of bounds") : $Result.Ok(v);
+               });
+            }
+      }()},
+      A2($List._op["::"],
+      $Html$Attributes$Extra.valueAsFloat(p.value),
+      A2($List._op["::"],
+      A2($Html$Attributes$Extra.stringProperty,
+      "step",
+      A2($Maybe.withDefault,
+      "any",
+      A2($Maybe.map,$Basics.toString,p.step))),
+      filterJust(_U.list([A2($Maybe.map,
+                         function (_p7) {
+                            return $Html$Attributes.min($Basics.toString(_p7));
+                         },
+                         p.min)
+                         ,A2($Maybe.map,
+                         function (_p8) {
+                            return $Html$Attributes.max($Basics.toString(_p8));
+                         },
+                         p.max)])))));
+   };
+   var inputMaybeFloat$ = function (p) {
+      var filterJust = $List.filterMap($Basics.identity);
+      return A2(inputField$,
+      {$class: p.$class
+      ,name: p.name
+      ,placeholder: p.placeholder
+      ,update: p.update
+      ,type$: "number"
+      ,pattern: $Maybe.Nothing
+      ,required: false
+      ,decoder: function () {
+         var _p9 = {ctor: "_Tuple2",_0: p.min,_1: p.max};
+         if (_p9.ctor === "_Tuple2" && _p9._0.ctor === "Nothing" && _p9._1.ctor === "Nothing")
+         {
+               return $Html$Events$Extra.targetValueMaybeFloat;
+            } else {
+               return A2($Json$Decode.customDecoder,
+               $Html$Events$Extra.targetValueMaybeFloat,
+               function (mv) {
+                  var _p10 = mv;
+                  if (_p10.ctor === "Nothing") {
+                        return $Result.Ok($Maybe.Nothing);
+                     } else {
+                        var _p11 = _p10._0;
+                        return _U.cmp(_p11,
+                        A2($Maybe.withDefault,-1 / 0,p.min)) < 0 || _U.cmp(_p11,
+                        A2($Maybe.withDefault,
+                        1 / 0,
+                        p.max)) > 0 ? $Result.Err("out of bounds") : $Result.Ok(mv);
+                     }
+               });
+            }
+      }()},
+      A2($List._op["::"],
+      function () {
+         var _p12 = p.value;
+         if (_p12.ctor === "Nothing") {
+               return $Html$Attributes.value("");
+            } else {
+               return $Html$Attributes$Extra.valueAsFloat(_p12._0);
+            }
+      }(),
+      A2($List._op["::"],
+      A2($Html$Attributes$Extra.stringProperty,
+      "step",
+      A2($Maybe.withDefault,
+      "any",
+      A2($Maybe.map,$Basics.toString,p.step))),
+      filterJust(_U.list([A2($Maybe.map,
+                         function (_p13) {
+                            return $Html$Attributes.min($Basics.toString(_p13));
+                         },
+                         p.min)
+                         ,A2($Maybe.map,
+                         function (_p14) {
+                            return $Html$Attributes.max($Basics.toString(_p14));
+                         },
+                         p.max)])))));
+   };
+   var inputInt$ = function (p) {
+      var filterJust = $List.filterMap($Basics.identity);
+      return A2(inputField$,
+      {$class: p.$class
+      ,name: p.name
+      ,placeholder: p.placeholder
+      ,update: p.update
+      ,type$: "number"
+      ,pattern: $Maybe.Nothing
+      ,required: true
+      ,decoder: function () {
+         var _p15 = {ctor: "_Tuple2",_0: p.min,_1: p.max};
+         if (_p15.ctor === "_Tuple2" && _p15._0.ctor === "Nothing" && _p15._1.ctor === "Nothing")
+         {
+               return $Html$Events$Extra.targetValueInt;
+            } else {
+               return A2($Json$Decode.customDecoder,
+               $Html$Events$Extra.targetValueInt,
+               function (v) {
+                  return _U.cmp(v,
+                  A2($Maybe.withDefault,
+                  $Basics.floor(-1 / 0),
+                  p.min)) < 0 || _U.cmp(v,
+                  A2($Maybe.withDefault,
+                  $Basics.ceiling(1 / 0),
+                  p.max)) > 0 ? $Result.Err("out of bounds") : $Result.Ok(v);
+               });
+            }
+      }()},
+      A2($List._op["::"],
+      $Html$Attributes$Extra.valueAsInt(p.value),
+      filterJust(_U.list([A2($Maybe.map,
+                         function (_p16) {
+                            return $Html$Attributes.min($Basics.toString(_p16));
+                         },
+                         p.min)
+                         ,A2($Maybe.map,
+                         function (_p17) {
+                            return $Html$Attributes.max($Basics.toString(_p17));
+                         },
+                         p.max)
+                         ,A2($Maybe.map,
+                         function (_p18) {
+                            return A2($Html$Attributes$Extra.stringProperty,
+                            "step",
+                            $Basics.toString(_p18));
+                         },
+                         p.step)]))));
+   };
+   var inputMaybeInt$ = function (p) {
+      var filterJust = $List.filterMap($Basics.identity);
+      return A2(inputField$,
+      {$class: p.$class
+      ,name: p.name
+      ,placeholder: p.placeholder
+      ,update: p.update
+      ,type$: "number"
+      ,pattern: $Maybe.Nothing
+      ,required: false
+      ,decoder: function () {
+         var _p19 = {ctor: "_Tuple2",_0: p.min,_1: p.max};
+         if (_p19.ctor === "_Tuple2" && _p19._0.ctor === "Nothing" && _p19._1.ctor === "Nothing")
+         {
+               return $Html$Events$Extra.targetValueMaybeInt;
+            } else {
+               return A2($Json$Decode.customDecoder,
+               $Html$Events$Extra.targetValueMaybeInt,
+               function (mv) {
+                  var _p20 = mv;
+                  if (_p20.ctor === "Nothing") {
+                        return $Result.Ok($Maybe.Nothing);
+                     } else {
+                        var _p21 = _p20._0;
+                        return _U.cmp(_p21,
+                        A2($Maybe.withDefault,
+                        $Basics.floor(-1 / 0),
+                        p.min)) < 0 || _U.cmp(_p21,
+                        A2($Maybe.withDefault,
+                        $Basics.ceiling(1 / 0),
+                        p.max)) > 0 ? $Result.Err("out of bounds") : $Result.Ok(mv);
+                     }
+               });
+            }
+      }()},
+      A2($List._op["::"],
+      function () {
+         var _p22 = p.value;
+         if (_p22.ctor === "Nothing") {
+               return $Html$Attributes.value("");
+            } else {
+               return $Html$Attributes$Extra.valueAsInt(_p22._0);
+            }
+      }(),
+      filterJust(_U.list([A2($Maybe.map,
+                         function (_p23) {
+                            return $Html$Attributes.min($Basics.toString(_p23));
+                         },
+                         p.min)
+                         ,A2($Maybe.map,
+                         function (_p24) {
+                            return $Html$Attributes.max($Basics.toString(_p24));
+                         },
+                         p.max)
+                         ,A2($Maybe.map,
+                         function (_p25) {
+                            return A2($Html$Attributes$Extra.stringProperty,
+                            "step",
+                            $Basics.toString(_p25));
+                         },
+                         p.step)]))));
+   };
+   var inputUrl$ = function (p) {
+      return A2(inputField$,
+      {$class: p.$class
+      ,name: p.name
+      ,placeholder: p.placeholder
+      ,update: p.update
+      ,type$: "url"
+      ,pattern: $Maybe.Nothing
+      ,required: p.required
+      ,decoder: $Html$Events.targetValue},
+      _U.list([$Html$Attributes.value(p.value)
+              ,$Html$Attributes.autocomplete(p.autocomplete)]));
+   };
+   var inputMaybeUrl$ = function (p) {
+      return A2(inputField$,
+      {$class: p.$class
+      ,name: p.name
+      ,placeholder: p.placeholder
+      ,update: p.update
+      ,type$: "url"
+      ,pattern: $Maybe.Nothing
+      ,required: false
+      ,decoder: $Html$Events$Extra.targetValueMaybe},
+      _U.list([$Html$Attributes.value(A2($Maybe.withDefault,
+              "",
+              p.value))
+              ,$Html$Attributes.autocomplete(p.autocomplete)]));
+   };
+   var select$ = function (p) {
+      var i$ = encodeId(p.name);
+      return $Html.select(_U.list([class$(p.$class)
+                                  ,$Html$Attributes.id(i$)
+                                  ,$Html$Attributes.name(i$)
+                                  ,A2($Html$Shorthand$Event.onChange,
+                                  $Html$Events.targetValue,
+                                  p.update.onSelect)]));
+   };
+   var output$ = function (p) {
+      var i$ = encodeId(p.name);
+      return $Html.output(_U.list([class$(p.$class)
+                                  ,$Html$Attributes.id(i$)
+                                  ,$Html$Attributes.name(i$)
+                                  ,$Html$Attributes.$for(A2($String.join,
+                                  " ",
+                                  A2($List.map,encodeId,p.$for)))]));
+   };
+   var fieldUpdateFallbackFocusLost = function (handler) {
+      var doErr = function (r) {
+         var _p26 = r;
+         if (_p26.ctor === "Ok") {
+               return $Maybe.Nothing;
+            } else {
+               var _p27 = A2($Json$Decode.decodeValue,
+               $Html$Events.targetValue,
+               _p26._0.event);
+               if (_p27.ctor === "Ok") {
+                     return $Maybe.Just(handler.onFallback(_p27._0));
+                  } else {
+                     return $Maybe.Nothing;
+                  }
+            }
+      };
+      var doOk = function (r) {
+         var _p28 = r;
+         if (_p28.ctor === "Ok") {
+               return $Maybe.Just(handler.onInput(_p28._0));
+            } else {
+               return $Maybe.Nothing;
+            }
+      };
+      return {onInput: $Maybe.Just(doOk)
+             ,onEnter: $Maybe.Just(doErr)
+             ,onKeyboardLost: $Maybe.Just(doErr)};
+   };
+   var fieldUpdate = {onInput: $Maybe.Nothing
+                     ,onEnter: $Maybe.Nothing
+                     ,onKeyboardLost: $Maybe.Nothing};
+   var fieldUpdateContinuous = function (handler) {
+      var doOk = function (r) {
+         var _p29 = r;
+         if (_p29.ctor === "Ok") {
+               return $Maybe.Just(handler.onInput(_p29._0));
+            } else {
+               return $Maybe.Nothing;
+            }
+      };
+      return _U.update(fieldUpdate,{onInput: $Maybe.Just(doOk)});
+   };
+   var fieldUpdateFocusLost = function (handler) {
+      var doOk = function (r) {
+         var _p30 = r;
+         if (_p30.ctor === "Ok") {
+               return $Maybe.Just(handler.onInput(_p30._0));
+            } else {
+               return $Maybe.Nothing;
+            }
+      };
+      return _U.update(fieldUpdate,
+      {onEnter: $Maybe.Just(doOk),onKeyboardLost: $Maybe.Just(doOk)});
+   };
+   var fieldUpdateFallbackContinuous = function (handler) {
+      var doOkErr = function (r) {
+         var _p31 = r;
+         if (_p31.ctor === "Ok") {
+               return $Maybe.Just(handler.onInput(_p31._0));
+            } else {
+               var _p32 = A2($Json$Decode.decodeValue,
+               $Html$Events.targetValue,
+               _p31._0.event);
+               if (_p32.ctor === "Ok") {
+                     return $Maybe.Just(handler.onFallback(_p32._0));
+                  } else {
+                     return $Maybe.Nothing;
+                  }
+            }
+      };
+      return _U.update(fieldUpdate,{onInput: $Maybe.Just(doOkErr)});
+   };
+   var AutoDirection = {ctor: "AutoDirection"};
+   var RightToLeft = {ctor: "RightToLeft"};
+   var LeftToRight = {ctor: "LeftToRight"};
+   return _elm.Html.Shorthand.values = {_op: _op
+                                       ,LeftToRight: LeftToRight
+                                       ,RightToLeft: RightToLeft
+                                       ,AutoDirection: AutoDirection
+                                       ,fieldUpdate: fieldUpdate
+                                       ,fieldUpdateContinuous: fieldUpdateContinuous
+                                       ,fieldUpdateFocusLost: fieldUpdateFocusLost
+                                       ,fieldUpdateFallbackFocusLost: fieldUpdateFallbackFocusLost
+                                       ,fieldUpdateFallbackContinuous: fieldUpdateFallbackContinuous
+                                       ,encodeId: encodeId
+                                       ,encodeClass: encodeClass
+                                       ,id$: id$
+                                       ,class$: class$
+                                       ,body_: body_
+                                       ,body$: body$
+                                       ,section_: section_
+                                       ,section$: section$
+                                       ,nav_: nav_
+                                       ,nav$: nav$
+                                       ,article_: article_
+                                       ,article$: article$
+                                       ,aside$: aside$
+                                       ,h1_: h1_
+                                       ,h1$: h1$
+                                       ,h2_: h2_
+                                       ,h2$: h2$
+                                       ,h3_: h3_
+                                       ,h3$: h3$
+                                       ,h4_: h4_
+                                       ,h4$: h4$
+                                       ,h5_: h5_
+                                       ,h5$: h5$
+                                       ,h6_: h6_
+                                       ,h6$: h6$
+                                       ,header_: header_
+                                       ,header$: header$
+                                       ,footer_: footer_
+                                       ,footer$: footer$
+                                       ,address_: address_
+                                       ,address$: address$
+                                       ,main_: main_
+                                       ,p_: p_
+                                       ,p$: p$
+                                       ,hr_: hr_
+                                       ,pre_: pre_
+                                       ,pre$: pre$
+                                       ,blockquote_: blockquote_
+                                       ,blockquote$: blockquote$
+                                       ,ol_: ol_
+                                       ,ol$: ol$
+                                       ,ul_: ul_
+                                       ,ul$: ul$
+                                       ,li_: li_
+                                       ,li$: li$
+                                       ,dl_: dl_
+                                       ,dl$: dl$
+                                       ,dt$: dt$
+                                       ,dd_: dd_
+                                       ,dd$: dd$
+                                       ,figure$: figure$
+                                       ,figcaption_: figcaption_
+                                       ,figcaption$: figcaption$
+                                       ,div_: div_
+                                       ,div$: div$
+                                       ,a_: a_
+                                       ,a$: a$
+                                       ,em_: em_
+                                       ,em$: em$
+                                       ,strong_: strong_
+                                       ,strong$: strong$
+                                       ,small_: small_
+                                       ,small$: small$
+                                       ,s_: s_
+                                       ,s$: s$
+                                       ,cite_: cite_
+                                       ,cite$: cite$
+                                       ,q_: q_
+                                       ,q$: q$
+                                       ,dfn$: dfn$
+                                       ,abbr_: abbr_
+                                       ,abbr$: abbr$
+                                       ,code_: code_
+                                       ,code$: code$
+                                       ,var_: var_
+                                       ,var$: var$
+                                       ,samp_: samp_
+                                       ,samp$: samp$
+                                       ,kbd_: kbd_
+                                       ,kbd$: kbd$
+                                       ,sub_: sub_
+                                       ,sub$: sub$
+                                       ,sup_: sup_
+                                       ,sup$: sup$
+                                       ,i_: i_
+                                       ,i$: i$
+                                       ,b_: b_
+                                       ,b$: b$
+                                       ,u_: u_
+                                       ,u$: u$
+                                       ,mark_: mark_
+                                       ,mark$: mark$
+                                       ,ruby_: ruby_
+                                       ,ruby$: ruby$
+                                       ,rt_: rt_
+                                       ,rt$: rt$
+                                       ,rp_: rp_
+                                       ,rp$: rp$
+                                       ,bdi_: bdi_
+                                       ,bdi$: bdi$
+                                       ,bdo$: bdo$
+                                       ,span_: span_
+                                       ,span$: span$
+                                       ,br$: br$
+                                       ,wbr$: wbr$
+                                       ,ins_: ins_
+                                       ,ins$: ins$
+                                       ,del_: del_
+                                       ,del$: del$
+                                       ,img$: img$
+                                       ,img_: img_
+                                       ,iframe$: iframe$
+                                       ,embed$: embed$
+                                       ,object$: object$
+                                       ,param$: param$
+                                       ,video_: video_
+                                       ,video$: video$
+                                       ,audio_: audio_
+                                       ,audio$: audio$
+                                       ,table_: table_
+                                       ,table$: table$
+                                       ,caption_: caption_
+                                       ,caption$: caption$
+                                       ,tbody_: tbody_
+                                       ,tbody$: tbody$
+                                       ,thead_: thead_
+                                       ,thead$: thead$
+                                       ,tfoot_: tfoot_
+                                       ,tfoot$: tfoot$
+                                       ,tr_: tr_
+                                       ,tr$: tr$
+                                       ,td_: td_
+                                       ,td$: td$
+                                       ,th_: th_
+                                       ,th$: th$
+                                       ,form$: form$
+                                       ,fieldset_: fieldset_
+                                       ,fieldset$: fieldset$
+                                       ,legend_: legend_
+                                       ,legend$: legend$
+                                       ,label_: label_
+                                       ,label$: label$
+                                       ,inputField$: inputField$
+                                       ,inputText$: inputText$
+                                       ,inputMaybeText$: inputMaybeText$
+                                       ,inputFloat$: inputFloat$
+                                       ,inputMaybeFloat$: inputMaybeFloat$
+                                       ,inputInt$: inputInt$
+                                       ,inputMaybeInt$: inputMaybeInt$
+                                       ,inputUrl$: inputUrl$
+                                       ,inputMaybeUrl$: inputMaybeUrl$
+                                       ,button_: button_
+                                       ,button$: button$
+                                       ,buttonLink_: buttonLink_
+                                       ,buttonLink$: buttonLink$
+                                       ,buttonSubmit_: buttonSubmit_
+                                       ,buttonSubmit$: buttonSubmit$
+                                       ,buttonReset_: buttonReset_
+                                       ,buttonReset$: buttonReset$
+                                       ,select$: select$
+                                       ,option_: option_
+                                       ,option$: option$
+                                       ,output$: output$
+                                       ,progress$: progress$
+                                       ,meter$: meter$};
+};

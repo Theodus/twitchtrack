@@ -1,0 +1,124 @@
+Elm.Bootstrap = Elm.Bootstrap || {};
+Elm.Bootstrap.Html = Elm.Bootstrap.Html || {};
+Elm.Bootstrap.Html.Internal = Elm.Bootstrap.Html.Internal || {};
+Elm.Bootstrap.Html.Internal.make = function (_elm) {
+   "use strict";
+   _elm.Bootstrap = _elm.Bootstrap || {};
+   _elm.Bootstrap.Html = _elm.Bootstrap.Html || {};
+   _elm.Bootstrap.Html.Internal = _elm.Bootstrap.Html.Internal || {};
+   if (_elm.Bootstrap.Html.Internal.values)
+   return _elm.Bootstrap.Html.Internal.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Html$Shorthand = Elm.Html.Shorthand.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var colOffset = F3(function (gridsize,colspan,offset) {
+      var prefix = A2($Basics._op["++"],
+      "col",
+      A2($Basics._op["++"],
+      A2($String.cons,_U.chr("-"),gridsize),
+      "-"));
+      return _U.cmp(offset,0) > 0 ? A2($Basics._op["++"],
+      prefix,
+      A2($Basics._op["++"],
+      $Basics.toString(colspan),
+      A2($Basics._op["++"],
+      A2($String.cons,_U.chr(" "),prefix),
+      A2($Basics._op["++"],
+      "offset-",
+      $Basics.toString(offset))))) : A2($Basics._op["++"],
+      prefix,
+      $Basics.toString(colspan));
+   });
+   var btncNoevent = F3(function (c,typ,_p0) {
+      var _p1 = _p0;
+      var filterJust = $List.filterMap($Basics.identity);
+      return A2($Html.button,
+      A2($List._op["::"],
+      $Html$Attributes.type$(typ),
+      A2($List._op["::"],
+      $Html$Shorthand.class$(A2($Basics._op["++"],"btn ",c)),
+      filterJust(_U.list([A2($Maybe.map,
+      $Html$Attributes.title,
+      _p1.tooltip)])))),
+      function () {
+         var _p2 = {ctor: "_Tuple2",_0: _p1.icon,_1: _p1.label};
+         _v1_3: do {
+            if (_p2.ctor === "_Tuple2") {
+                  if (_p2._0.ctor === "Just") {
+                        if (_p2._1.ctor === "Just") {
+                              return _U.list([_p2._0._0
+                                             ,$Html.text(A2($String.cons,_U.chr(" "),_p2._1._0))]);
+                           } else {
+                              return _U.list([_p2._0._0]);
+                           }
+                     } else {
+                        if (_p2._1.ctor === "Just") {
+                              return _U.list([$Html.text(_p2._1._0)]);
+                           } else {
+                              break _v1_3;
+                           }
+                     }
+               } else {
+                  break _v1_3;
+               }
+         } while (false);
+         return _U.list([]);
+      }());
+   });
+   var btnc = F5(function (c,typ,_p3,addr,x) {
+      var _p4 = _p3;
+      var filterJust = $List.filterMap($Basics.identity);
+      return A2($Html.button,
+      A2($List._op["::"],
+      $Html$Attributes.type$(typ),
+      A2($List._op["::"],
+      $Html$Shorthand.class$(A2($Basics._op["++"],"btn ",c)),
+      A2($List._op["::"],
+      A2($Html$Events.onClick,addr,x),
+      filterJust(_U.list([A2($Maybe.map,
+      $Html$Attributes.title,
+      _p4.tooltip)]))))),
+      function () {
+         var _p5 = {ctor: "_Tuple2",_0: _p4.icon,_1: _p4.label};
+         _v3_3: do {
+            if (_p5.ctor === "_Tuple2") {
+                  if (_p5._0.ctor === "Just") {
+                        if (_p5._1.ctor === "Just") {
+                              return _U.list([_p5._0._0
+                                             ,$Html.text(A2($String.cons,_U.chr(" "),_p5._1._0))]);
+                           } else {
+                              return _U.list([_p5._0._0]);
+                           }
+                     } else {
+                        if (_p5._1.ctor === "Just") {
+                              return _U.list([$Html.text(_p5._1._0)]);
+                           } else {
+                              break _v3_3;
+                           }
+                     }
+               } else {
+                  break _v3_3;
+               }
+         } while (false);
+         return _U.list([]);
+      }());
+   });
+   var BtnParam = F3(function (a,b,c) {
+      return {icon: a,label: b,tooltip: c};
+   });
+   return _elm.Bootstrap.Html.Internal.values = {_op: _op
+                                                ,BtnParam: BtnParam
+                                                ,btnc: btnc
+                                                ,btncNoevent: btncNoevent
+                                                ,colOffset: colOffset};
+};

@@ -1,0 +1,71 @@
+Elm.Html = Elm.Html || {};
+Elm.Html.Shorthand = Elm.Html.Shorthand || {};
+Elm.Html.Shorthand.Event = Elm.Html.Shorthand.Event || {};
+Elm.Html.Shorthand.Event.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Shorthand = _elm.Html.Shorthand || {};
+   _elm.Html.Shorthand.Event = _elm.Html.Shorthand.Event || {};
+   if (_elm.Html.Shorthand.Event.values)
+   return _elm.Html.Shorthand.Event.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Html$Shorthand$Type = Elm.Html.Shorthand.Type.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var messageDecoder = F2(function (dec,f) {
+      return A2($Json$Decode.customDecoder,
+      $Json$Decode.value,
+      function (event) {
+         var r = A2($Json$Decode.decodeValue,dec,event);
+         var r$ = A2($Result.formatError,
+         $Html$Shorthand$Type.EventDecodeError(event),
+         r);
+         var _p0 = {ctor: "_Tuple2",_0: f(r$),_1: r};
+         if (_p0._0.ctor === "Nothing") {
+               if (_p0._1.ctor === "Err") {
+                     return $Result.Err(_p0._1._0);
+                  } else {
+                     return $Result.Err("no message in response to event");
+                  }
+            } else {
+               return $Result.Ok(_p0._0._0);
+            }
+      });
+   });
+   var onMouseLost = $Html$Events.on("mouseleave");
+   var onKeyboardLost = $Html$Events.on("blur");
+   var onEnter = F2(function (dec,f) {
+      return A3($Html$Events.on,
+      "keydown",
+      A2($Json$Decode.customDecoder,
+      A3($Json$Decode.object2,
+      F2(function (v0,v1) {
+         return {ctor: "_Tuple2",_0: v0,_1: v1};
+      }),
+      $Html$Events.keyCode,
+      dec),
+      function (_p1) {
+         var _p2 = _p1;
+         return _U.eq(_p2._0,
+         13) ? $Result.Ok(_p2._1) : $Result.Err("expected key code 13");
+      }),
+      f);
+   });
+   var onChange = $Html$Events.on("change");
+   var onInput = $Html$Events.on("input");
+   return _elm.Html.Shorthand.Event.values = {_op: _op
+                                             ,onInput: onInput
+                                             ,onChange: onChange
+                                             ,onEnter: onEnter
+                                             ,onKeyboardLost: onKeyboardLost
+                                             ,onMouseLost: onMouseLost
+                                             ,messageDecoder: messageDecoder};
+};

@@ -1,0 +1,104 @@
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values) return _elm.Main.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Bootstrap$Html = Elm.Bootstrap.Html.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Shorthand = Elm.Html.Shorthand.make(_elm),
+   $Http = Elm.Http.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $StartApp = Elm.StartApp.make(_elm),
+   $Task = Elm.Task.make(_elm),
+   $Time = Elm.Time.make(_elm);
+   var _op = {};
+   var clockSignal = $Time.every($Time.minute * 2);
+   var rows = function (e) {
+      return $Html$Shorthand.tr_(_U.list([$Html$Shorthand.td_(_U.list([A2($Html$Shorthand.a_,
+                                         e.url,
+                                         e.channel)]))
+                                         ,$Html$Shorthand.td_(_U.list([$Html.text(_U.cmp(e.viewers,
+                                         0) > 0 ? e.game : "")]))
+                                         ,$Html$Shorthand.td_(_U.list([$Html.text(_U.cmp(e.viewers,
+                                         0) > 0 ? e.stream : "")]))]));
+   };
+   var view = F2(function (address,model) {
+      return $Bootstrap$Html.container_(_U.list([$Html$Shorthand.h2_("Twitch Streaming")
+                                                ,$Bootstrap$Html.tableBodyStriped_(_U.list([$Html$Shorthand.thead_(_U.list([$Html$Shorthand.tr_(_U.list([$Html$Shorthand.th_(_U.list([$Html.text("Channel")]))
+                                                                                                                                                        ,$Html$Shorthand.th_(_U.list([$Html.text("Game")]))
+                                                                                                                                                        ,$Html$Shorthand.th_(_U.list([$Html.text("Stream")]))]))]))
+                                                                                           ,$Html$Shorthand.tbody_(A2($List.map,rows,model))]))]));
+   });
+   var Entry = F5(function (a,b,c,d,e) {
+      return {channel: a,game: b,stream: c,url: d,viewers: e};
+   });
+   var decodeEntry = A6($Json$Decode.object5,
+   Entry,
+   A2($Json$Decode.at,_U.list(["channel"]),$Json$Decode.string),
+   A2($Json$Decode.at,_U.list(["game"]),$Json$Decode.string),
+   A2($Json$Decode.at,_U.list(["stream"]),$Json$Decode.string),
+   A2($Json$Decode.at,_U.list(["url"]),$Json$Decode.string),
+   A2($Json$Decode._op[":="],"viewers",$Json$Decode.$int));
+   var decode = A2($Json$Decode.at,
+   _U.list(["channels"]),
+   $Json$Decode.list(decodeEntry));
+   var httpTask = A2($Http.get,decode,"/data");
+   var OnRefresh = function (a) {
+      return {ctor: "OnRefresh",_0: a};
+   };
+   var refreshFx = $Effects.task(A2($Task.map,
+   OnRefresh,
+   $Task.toResult(httpTask)));
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "Refresh": return {ctor: "_Tuple2"
+                              ,_0: model
+                              ,_1: refreshFx};
+         case "OnRefresh": var message = A2($Result.withDefault,
+           _U.list([]),
+           _p0._0);
+           return {ctor: "_Tuple2",_0: message,_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: model,_1: $Effects.none};}
+   });
+   var Refresh = {ctor: "Refresh"};
+   var init = A2(update,Refresh,_U.list([]));
+   var clockRefresh = A2($Signal.map,
+   function (s) {
+      return Refresh;
+   },
+   clockSignal);
+   var app = $StartApp.start({init: init
+                             ,inputs: _U.list([clockRefresh])
+                             ,update: update
+                             ,view: view});
+   var main = app.html;
+   var runner = Elm.Native.Task.make(_elm).performSignal("runner",
+   app.tasks);
+   var NoOp = {ctor: "NoOp"};
+   return _elm.Main.values = {_op: _op
+                             ,NoOp: NoOp
+                             ,Refresh: Refresh
+                             ,OnRefresh: OnRefresh
+                             ,Entry: Entry
+                             ,view: view
+                             ,rows: rows
+                             ,httpTask: httpTask
+                             ,decode: decode
+                             ,decodeEntry: decodeEntry
+                             ,refreshFx: refreshFx
+                             ,init: init
+                             ,update: update
+                             ,clockSignal: clockSignal
+                             ,clockRefresh: clockRefresh
+                             ,app: app
+                             ,main: main};
+};

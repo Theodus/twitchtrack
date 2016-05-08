@@ -1,0 +1,145 @@
+Elm.Html = Elm.Html || {};
+Elm.Html.Shorthand = Elm.Html.Shorthand || {};
+Elm.Html.Shorthand.Internal = Elm.Html.Shorthand.Internal || {};
+Elm.Html.Shorthand.Internal.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Shorthand = _elm.Html.Shorthand || {};
+   _elm.Html.Shorthand.Internal = _elm.Html.Shorthand.Internal || {};
+   if (_elm.Html.Shorthand.Internal.values)
+   return _elm.Html.Shorthand.Internal.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Char = Elm.Char.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Shorthand$Type = Elm.Html.Shorthand.Type.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var encodeClass = function () {
+      var isAlpha = function (c) {
+         var cc = $Char.toCode($Char.toLower(c));
+         return _U.cmp(cc,$Char.toCode(_U.chr("a"))) > -1 && _U.cmp(cc,
+         $Char.toCode(_U.chr("z"))) < 1;
+      };
+      var startWithAlpha = function (s) {
+         var _p0 = $String.uncons(s);
+         if (_p0.ctor === "Just") {
+               return $Basics.not(isAlpha(_p0._0._0)) ? A2($String.cons,
+               _U.chr("x"),
+               s) : s;
+            } else {
+               return s;
+            }
+      };
+      var hu = _U.list([_U.chr("-"),_U.chr("_")]);
+      var isClassChar = function (c) {
+         return $Char.isDigit(c) || (isAlpha(c) || A2($List.member,
+         c,
+         hu));
+      };
+      var smartTrimLeft = function (s) {
+         var _p1 = $String.uncons(s);
+         if (_p1.ctor === "Just") {
+               return A2($List.member,_p1._0._0,hu) ? _p1._0._1 : s;
+            } else {
+               return s;
+            }
+      };
+      var smartTrimRight = function (s) {
+         var _p2 = $String.uncons($String.reverse(s));
+         if (_p2.ctor === "Just") {
+               return A2($List.member,
+               _p2._0._0,
+               hu) ? $String.reverse(_p2._0._1) : s;
+            } else {
+               return s;
+            }
+      };
+      var smartTrim = function (_p3) {
+         return smartTrimRight(smartTrimLeft(_p3));
+      };
+      return function (_p4) {
+         return A2($String.join,
+         " ",
+         A2($List.map,
+         function (_p5) {
+            return startWithAlpha(smartTrim(A2($String.filter,
+            isClassChar,
+            $String.toLower(_p5))));
+         },
+         $String.words(_p4)));
+      };
+   }();
+   var class$ = function (_p6) {
+      return $Html$Attributes.$class(encodeClass(_p6));
+   };
+   var encodeId = function () {
+      var isAlpha = function (c) {
+         var cc = $Char.toCode($Char.toLower(c));
+         return _U.cmp(cc,$Char.toCode(_U.chr("a"))) > -1 && _U.cmp(cc,
+         $Char.toCode(_U.chr("z"))) < 1;
+      };
+      var startWithAlpha = function (s) {
+         var _p7 = $String.uncons(s);
+         if (_p7.ctor === "Just") {
+               return $Basics.not(isAlpha(_p7._0._0)) ? A2($String.cons,
+               _U.chr("x"),
+               s) : s;
+            } else {
+               return s;
+            }
+      };
+      var hu = _U.list([_U.chr("-"),_U.chr("_")]);
+      var isIdChar = function (c) {
+         return $Char.isDigit(c) || (isAlpha(c) || A2($List.member,
+         c,
+         hu));
+      };
+      var smartTrimLeft = function (s) {
+         var _p8 = $String.uncons(s);
+         if (_p8.ctor === "Just") {
+               return A2($List.member,_p8._0._0,hu) ? _p8._0._1 : s;
+            } else {
+               return s;
+            }
+      };
+      var smartTrimRight = function (s) {
+         var _p9 = $String.uncons($String.reverse(s));
+         if (_p9.ctor === "Just") {
+               return A2($List.member,
+               _p9._0._0,
+               hu) ? $String.reverse(_p9._0._1) : s;
+            } else {
+               return s;
+            }
+      };
+      var smartTrim = function (_p10) {
+         return smartTrimRight(smartTrimLeft(_p10));
+      };
+      return function (_p11) {
+         return startWithAlpha(A2($String.join,
+         "-",
+         A2($List.map,
+         function (_p12) {
+            return smartTrim(A2($String.filter,
+            isIdChar,
+            $String.toLower(_p12)));
+         },
+         $String.words(_p11))));
+      };
+   }();
+   var id$ = function (_p13) {
+      return $Html$Attributes.id(encodeId(_p13));
+   };
+   return _elm.Html.Shorthand.Internal.values = {_op: _op
+                                                ,encodeId: encodeId
+                                                ,encodeClass: encodeClass
+                                                ,id$: id$
+                                                ,class$: class$};
+};

@@ -12,7 +12,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", rootHandler)
-	http.HandleFunc("/elm.js", elmHandler)
+	http.HandleFunc("/script.js", scriptHandler)
 	http.HandleFunc("/data", dataHandler)
 	var port string
 	if len(os.Args) == 2 {
@@ -28,8 +28,8 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "index.html")
 }
 
-func elmHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "elm.js")
+func scriptHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "script.js")
 }
 
 func dataHandler(w http.ResponseWriter, r *http.Request) {
